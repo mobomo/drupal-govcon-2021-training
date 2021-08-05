@@ -1,0 +1,34 @@
+# This is the SAM template that represents the architecture of your serverless application
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
+
+# The AWSTemplateFormatVersion identifies the capabilities of the template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  aws-sam-typescript-layers-example
+# Transform section specifies one or more macros that AWS CloudFormation uses to process your template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
+Transform:
+- AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Environment:
+      Variables:
+        REGION: ${AWS::Region}
+        RESULTS_BUCKET: !Ref PublicFilesBucket
+    Timeout: 100
+    MemorySize: 2048
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  PublicFilesBucket:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c2b8ca1dad447f8a
+      InstanceType:
+
+
+Outputs:
+
