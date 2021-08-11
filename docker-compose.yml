@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+    web:
+        container_name: '${PROJECT_NAME}_web'
+        build:
+            context: .
+        volumes:
+            - ./drupal/public_html:/var/www/public_html
+            - ./drupal/storage:/var/www/storage
+            - ./drupal/config:/var/www/config
+        links:
+            - db:db
+        ports:
+            - '8080:80'
+        env_file:
+            - .env
+        networks:
+            - devcon-local
+
+    db:
+        container_name: '${PROJECT_NAME}_db'
+        image: mariadb:10.2
+        ports:
+            - '3306:3306'
+        environment:
+            MYSQL_DATABASE: ${MYSQL_DATABASE}
+            MYSQL_USER: ${MYSQL_USER}
+            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+        volumes:
+            - sql:/var/lib/mysql
+            - ./docker/db/manual_sql_dumps:/var/lib/mysql/dumps
+        command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+        networks:
+            - devcon-local
+        env_file:
+            - .env
+volumes:
+    sql:
+
+networks:
+    devcon-local:
+        driver: bridge
