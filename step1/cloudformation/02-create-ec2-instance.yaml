@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  IAMRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: web-role
+      Description: "IAM Role applied to web servers"
+      MaxSessionDuration: 3600
+      Path: "/"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "ec2.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      Policies:
+        - PolicyName: Allow-S3-Access
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - "s3:*"
+                Resource: 
+                  - "arn:aws:s3:::drupal-govcon-2021-assets"
+                  - "arn:aws:s3:::drupal-govcon-2021-assets/*"
+                  - "arn:aws:s3:::drupal-govcon-2021"
+                  - "arn:aws:s3:::drupal-govcon-2021/*"
+
+  IAMInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      InstanceProfileName: web-role
+      Path: "/"
+      Roles:
+        - Ref: "IAMRole"
+
+  EC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      BlockDeviceMappings:
+          -
+            DeviceName: /dev/sda1
+            Ebs:
+              VolumeSize: 20
+              VolumeType: gp3
+              DeleteOnTermination: true
+      EbsOptimized: true
+      IamInstanceProfile: !Ref IAMRole
+      ImageId: ami-0c2b8ca1dad447f8a
+      InstanceType: t3.small
+      KeyName: devcon-bastion
+      SecurityGroupIds: 
+        - "sg-af2496b0"
+        - "sg-057a660e738fc4536"
+      SubnetId: subnet-1d426442
+      Tags: 
+        -
+          Key: Name
+          Value: Phase One
+      UserData:
+        !Base64 |
+        #!/bin/sh -xe
+        sudo yum update -y && sudo yum install -y docker git
+
+        # Install docker-compose and setup docker
+        sudo service docker start
+        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        sudo chmod +x /usr/local/bin/docker-compose
+
+        # Setup app folder structure
+        sudo mkdir /var/app -p
+
+        # Setup key for git access, and .env file
+        aws s3 cp s3://drupal-govcon-2021/devcon-bastion.pem ~/.ssh/devcon-bastion.pem
+        aws s3 cp s3://drupal-govcon-2021/.env /tmp/.env
+        sudo chmod 0400 ~/.ssh/devcon-bastion.pem
+
+        # clone repo
+        GIT_SSH_COMMAND="ssh -i ~/.ssh/devcon-bastion.pem -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone git@github.com:mobomo/drupal-govcon-2021-training.git /var/app
+
+        # startup docker-compose
+        sudo mv /tmp/.env /var/app/.env
+        cd /var/app/
+        docker-compose up --build -d
+
+        # run drupal install
+        docker exec devcon_web sh -c "cd /var/www/public_html && drush --root=/var/www/public_html site-install minimal -vv --account-name=admin --account-pass=admin --yes --db-url=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@${MYSQL_HOST}:3306/${MYSQL_DATABASE}"
+        docker exec devcon_web sh -c "cd /var/www/public_html && drush --root=/var/www/public_html drush theme enable lark && drush --root=/var/www/public_html cr"
+        docker exec devcon_web sh -c "cd /var/www/public_html && drush --root=/var/www/public_html drush theme set admin lark"
+
+  DNS:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : Z01629752800X7928YLRP
+      Name: govcon2021.mobomo.net
+      ResourceRecords:
+      - !GetAtt EC2Instance.PublicIp
+      TTL: 60
+      Type: A

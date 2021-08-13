@@ -22,9 +22,10 @@ RUN apk update && apk upgrade && apk add \
 	php7-simplexml \
 	php7-xml \
 	php7-ctype \
+	mysql-client \
 	curl \
 	&& curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer  \
-	&& composer global require drush/drush \
+	&& composer global require drush/drush:~10 \
 	&& composer clearcache \
 	&& ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush \
 	&& cp /usr/bin/php7 /usr/bin/php \
