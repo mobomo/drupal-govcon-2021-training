@@ -20,7 +20,7 @@ services:
 
     db:
         container_name: '${PROJECT_NAME}_db'
-        image: mariadb:10.2
+        image: mariadb:10.6
         ports:
             - '3306:3306'
         environment:
