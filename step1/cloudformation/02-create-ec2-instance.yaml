@@ -88,9 +88,7 @@ Resources:
         docker-compose up --build -d
 
         # run drupal install
-        docker exec devcon_web sh -c "cd /var/www/public_html && drush --root=/var/www/public_html site-install minimal -vv --account-name=admin --account-pass=admin --yes --db-url=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@${MYSQL_HOST}:3306/${MYSQL_DATABASE}"
-        docker exec devcon_web sh -c "cd /var/www/public_html && drush --root=/var/www/public_html drush theme enable lark && drush --root=/var/www/public_html cr"
-        docker exec devcon_web sh -c "cd /var/www/public_html && drush --root=/var/www/public_html drush theme set admin lark"
+        docker exec devcon_web sh -c "/bootstrap/install-drupal.sh"
 
   DNS:
     Type: AWS::Route53::RecordSet

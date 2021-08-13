@@ -42,7 +42,7 @@ COPY php.ini /etc/php7/php.ini
 
 # setup entrypoint file and apply execution rights
 ADD ./entrypoint.sh /bootstrap/entrypoint.sh
-RUN chmod +x /bootstrap/entrypoint.sh
+ADD ./install-drupal.sh /bootstrap/install-drupal.sh
 
 # expose on port 80 and set workdir
 EXPOSE 80
