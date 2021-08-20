@@ -87,8 +87,8 @@ Resources:
         cd /var/app/
         docker-compose up --build -d
 
-        docker run -p 8080:8080 -v /var/app/:/home/coder/project mobomo/vscode_php:1.2.0 -d
-        
+        docker run -p 8080:8080 -d -v /var/app/:/home/coder/project mobomo/vscode_php:1.2.0
+
         # run drupal install
         docker exec devcon_web sh -c "/bootstrap/install-drupal.sh"
 
