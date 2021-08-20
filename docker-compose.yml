@@ -35,6 +35,18 @@ services:
             - devcon-local
         env_file:
             - .env
+
+    ide:
+        container_name: '${PROJECT_NAME}_ide'
+        image: mobomo/vscode_php:1.2.0
+        volumes:
+          - ./drupal/:/home/coder/project
+        ports:
+            - '8080:8080'
+        networks:
+            - evcon-local
+        env_file:
+            - .env
 volumes:
     sql:
 
