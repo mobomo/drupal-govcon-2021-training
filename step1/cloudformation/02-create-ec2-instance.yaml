@@ -1,4 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  DefaultSecurityGroupId:
+    Description: ID of default security group in your VPC
+    Type: String
+
 Resources:
   IAMRole:
     Type: "AWS::IAM::Role"
@@ -38,6 +44,34 @@ Resources:
       Roles:
         - Ref: "IAMRole"
 
+  WebSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow web access directly to EC2 instance with public IP
+      VpcId: vpc-709cea0d
+
+  WebSecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: WebSecurityGroup
+    Properties:
+      IpProtocol: tcp
+      CidrIp: 0.0.0.0/0
+      FromPort: 80
+      ToPort: 80
+      GroupId: !GetAtt WebSecurityGroup.GroupId
+      Description: Allow ingress on port 80
+
+  DefaultSecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: WebSecurityGroup
+    Properties:
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref DefaultSecurityGroupId
+      FromPort: 22
+      ToPort: 22
+      GroupId: !GetAtt WebSecurityGroup.GroupId
+      Description: Allow SSH from default SG 
+
   EC2Instance:
     Type: "AWS::EC2::Instance"
     Properties:
@@ -54,8 +88,7 @@ Resources:
       InstanceType: t3.small
       KeyName: devcon-bastion
       SecurityGroupIds: 
-        - "sg-af2496b0"
-        - "sg-057a660e738fc4536"
+        - !Ref WebSecurityGroup
       SubnetId: subnet-1d426442
       Tags: 
         -
