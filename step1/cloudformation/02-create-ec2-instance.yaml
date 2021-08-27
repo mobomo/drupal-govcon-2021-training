@@ -97,13 +97,15 @@ Resources:
       UserData:
         !Base64 |
         #!/bin/sh -xe
-        sudo yum update -y && sudo yum install -y docker git
+        sudo yum update -y && sudo yum install -y docker git mysql
 
         # Install docker-compose and setup docker
         sudo service docker start
         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
-
+        sudo usermod -aG docker ec2-user
+        sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+        
         # Setup app folder structure
         sudo mkdir /var/app -p
 
