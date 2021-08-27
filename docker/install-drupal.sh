@@ -11,7 +11,7 @@ drush --root=/var/www/public_html site-install minimal -vv --account-name=admin 
 
 echo "Config found. Processing setting uuid..."
 
-cat ./config/system.site.yml | \
+cat /var/www/config/system.site.yml | \
 grep uuid | tail -c +7 | head -c 36 | \
 drush --root=/var/www/public_html config:set -y system.site uuid -
 
