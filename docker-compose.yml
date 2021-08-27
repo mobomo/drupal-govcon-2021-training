@@ -3,7 +3,7 @@ version: '3'
 services:
     web:
         container_name: '${PROJECT_NAME}_web'
-        image: mobomo/govcon2021-baseimage:1.0.5
+        image: mobomo/govcon2021-baseimage:1.0.8
         volumes:
             - ./drupal/public_html:/var/www/public_html
             - ./drupal/storage:/var/www/storage
