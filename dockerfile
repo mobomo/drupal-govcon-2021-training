@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=mobomo/govcon2021-baseimage:latest
+ARG BASE_IMAGE=mobomo/govcon2021-baseimage:1.0.10
 FROM ${BASE_IMAGE}
 
 ADD ./drupal/public_html/ /var/www/public_html
