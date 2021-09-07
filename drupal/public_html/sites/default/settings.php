@@ -812,4 +812,16 @@ $databases['default']['default'] = array (
   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
   'driver' => 'mysql',
 );
+
+$settings['file_private_path'] = 'sites/default/files/private';
+$settings['s3fs.use_s3_for_public'] = TRUE;
+$settings['s3fs.use_s3_for_private'] = TRUE;
+$config['s3fs.settings']['bucket'] = 'drupal-devcon-2021-assets';
+$config['s3fs.settings']['region'] = 'us-east-1';
+$config['s3fs.settings']['use_https'] = FALSE;
+$config['s3fs.settings']['public_folder'] = 's3fs-public';
+$config['s3fs.settings']['private_folder'] = 's3fs-private';
+$config['s3fs.settings']['use_cname'] = TRUE;
+$config['s3fs.settings']['domain'] = $_SERVER['HTTP_HOST'];
+
 $settings['config_sync_directory'] = '../config';
