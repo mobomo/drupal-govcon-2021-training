@@ -1,0 +1,133 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  WebSecurityGroupId:
+    Description: ID of web security group made in step1
+    Type: String
+
+  DBInstanceClass:
+    Default: db.r5.large
+    Description: Database Instance Class. db.r6g instance classes are supported for Aurora PostgreSQL 12.4 and higher, 11.9 and higher. db.t3.medium instance class is supported for Aurora PostgreSQL 10.7 or later. db.t3.large instance class is supported for Aurora PostgreSQL 11.6 and higher, 10.11 and higher.
+    Type: String
+    AllowedValues:
+    - db.t3.small
+    - db.t3.medium
+    - db.t3.large
+    - db.r5.large
+    - db.r5.xlarge
+    - db.r5.2xlarge
+    - db.r5.4xlarge
+    - db.r5.8xlarge
+    - db.r5.12xlarge
+    - db.r5.16xlarge
+    - db.r5.24xlarge
+    - db.r6g.large
+    - db.r6g.xlarge
+    - db.r6g.2xlarge
+    - db.r6g.4xlarge
+    - db.r6g.8xlarge
+    - db.r6g.12xlarge
+    - db.r6g.16xlarge
+
+  MasterUsername:
+    Description: Database master username
+    Type: String
+    MinLength: '1'
+    MaxLength: '16'
+    AllowedPattern: "^[a-zA-Z]+[0-9a-zA-Z_]*$"
+    ConstraintDescription: Must start with a letter. Only numbers, letters, and _ accepted. max length 16 characters
+
+  MasterPassword:
+    Description: Database master password
+    Type: String
+    MinLength: '8'
+    MaxLength: '16'
+    AllowedPattern: "^[a-zA-Z]+[0-9a-zA-Z_]*$"
+    ConstraintDescription: Must start with a letter. Only numbers, letters, and _ accepted. max length 16 characters
+
+Resources:
+  ClusterSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow communication to RDS from web instances
+      VpcId: vpc-709cea0d
+
+  RDSSecurityGroup:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    DependsOn: ClusterSecurityGroup
+    Properties:
+      IpProtocol: tcp
+      SourceSecurityGroupId: !Ref WebSecurityGroupId
+      FromPort: 3306
+      ToPort: 3306
+      GroupId: !GetAtt ClusterSecurityGroup.GroupId
+      Description: Allow ingress to RDS from WebSecurityGroup from step1 CF stack
+
+  DBSubnetGroup:
+    Type: 'AWS::RDS::DBSubnetGroup'
+    Properties:
+      DBSubnetGroupDescription: !Ref 'AWS::StackName'
+      SubnetIds:
+        - subnet-3a41280b
+        - subnet-79496c1f
+        - subnet-d1c2e2f0
+
+  DBParameterGroup:
+    Type: "AWS::RDS::DBParameterGroup"
+    Properties:
+      Description: "DB Parameter Group for Drupal"
+      Family: aurora5.6
+      Parameters:
+        max_allowed_packet: 67108864
+        slow_query_log: 1
+        long_query_time: 2
+        interactive_timeout: 300
+        wait_timeout: 90
+        innodb_large_prefix: 1
+        innodb_file_format: "barracuda"
+
+  DatabaseCluster:
+    Type: "AWS::RDS::DBCluster"
+    DependsOn: RDSSecurityGroup
+    Properties:
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterPassword
+      Engine: aurora
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      VpcSecurityGroupIds:
+        - !Ref ClusterSecurityGroup
+
+  DBInstancePrimary:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      DBClusterIdentifier: !Ref DatabaseCluster
+      DBInstanceClass: !Ref DBInstanceClass
+      DBParameterGroupName: !Ref DBParameterGroup
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      Engine: aurora
+      PubliclyAccessible: false
+
+  DBInstanceReplica:
+    Type: "AWS::RDS::DBInstance"
+    Properties:
+      DBClusterIdentifier: !Ref DatabaseCluster
+      DBInstanceClass: !Ref DBInstanceClass
+      DBParameterGroupName: !Ref DBParameterGroup
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      Engine: aurora
+      PubliclyAccessible: false
+
+  DNS:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : Z01629752800X7928YLRP
+      Name: db.govcon2021.mobomo.net
+      ResourceRecords:
+      - !GetAtt [DatabaseCluster, Endpoint.Address]
+      TTL: 60
+      Type: CNAME
+
+Outputs:
+  EndpointAddress:
+    Description: "Database endpoint address"
+    Value: !GetAtt [DatabaseCluster, Endpoint.Address]
