@@ -824,4 +824,5 @@ $config['s3fs.settings']['private_folder'] = 's3fs-private';
 $config['s3fs.settings']['use_cname'] = TRUE;
 $config['s3fs.settings']['domain'] = $_SERVER['HTTP_HOST'];
 
+$settings['php_storage']['twig']['directory'] = '../storage/php/default';
 $settings['config_sync_directory'] = '../config';
