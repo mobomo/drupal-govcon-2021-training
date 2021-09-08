@@ -114,6 +114,9 @@ Resources:
         aws s3 cp s3://drupal-govcon-2021/.env /tmp/.env
         sudo chmod 0400 ~/.ssh/devcon-bastion.pem
 
+        # allow access from cloud9
+        aws s3 cp s3://drupal-govcon-2021/id_rsa.pub - > ~/.ssh/authorized_keys
+
         # clone repo
         GIT_SSH_COMMAND="ssh -i ~/.ssh/devcon-bastion.pem -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone git@github.com:mobomo/drupal-govcon-2021-training.git /var/app
 
@@ -136,3 +139,12 @@ Resources:
       - !GetAtt EC2Instance.PublicIp
       TTL: 60
       Type: A
+
+Outputs:
+  InstancePublicIP:
+    Description: Public IP of Webserver
+    Value: !GetAtt EC2Instance.PublicIp
+
+  WebSecurityGroupID:
+    Description: Security Group ID for Web SG that allows ingress on port 80 for webservers
+    Value: !GetAtt WebSecurityGroup.GroupId
