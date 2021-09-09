@@ -1,7 +1,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Parameters:
-  WebSecurityGroupId:
+  DefaultSecurityGroupId:
     Description: ID of web security group made in step1
     Type: String
 
@@ -57,7 +57,7 @@ Resources:
     DependsOn: ClusterSecurityGroup
     Properties:
       IpProtocol: tcp
-      SourceSecurityGroupId: !Ref WebSecurityGroupId
+      SourceSecurityGroupId: !Ref DefaultSecurityGroupId
       FromPort: 3306
       ToPort: 3306
       GroupId: !GetAtt ClusterSecurityGroup.GroupId
@@ -107,15 +107,16 @@ Resources:
       Engine: aurora
       PubliclyAccessible: false
 
-  DBInstanceReplica:
-    Type: "AWS::RDS::DBInstance"
-    Properties:
-      DBClusterIdentifier: !Ref DatabaseCluster
-      DBInstanceClass: !Ref DBInstanceClass
-      DBParameterGroupName: !Ref DBParameterGroup
-      DBSubnetGroupName: !Ref DBSubnetGroup
-      Engine: aurora
-      PubliclyAccessible: false
+# Commented out due to added costs. This would be highly recommended for a production grade site
+#  DBInstanceReplica:
+#    Type: "AWS::RDS::DBInstance"
+#    Properties:
+#      DBClusterIdentifier: !Ref DatabaseCluster
+#      DBInstanceClass: !Ref DBInstanceClass
+#      DBParameterGroupName: !Ref DBParameterGroup
+#      DBSubnetGroupName: !Ref DBSubnetGroup
+#      Engine: aurora
+#      PubliclyAccessible: false
 
   DNS:
     Type: AWS::Route53::RecordSet

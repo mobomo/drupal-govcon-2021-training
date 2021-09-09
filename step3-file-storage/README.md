@@ -1,8 +1,10 @@
 
-0. Create s3 bucket for assets
+0. Create s3 bucket for assets back on cloud 9
 aws cloudformation create-stack --stack-name phase3-s3 --template-body file://${PWD}/step3-file-storage/cloudformation/01-create-s3-bucket.yaml
 
-1. Go into container in order to run commands to include s3fs
+
+
+1. Back on EC2 Server, Go into container in order to run commands to include s3fs
 
 docker exec -it devcon_web sh
 

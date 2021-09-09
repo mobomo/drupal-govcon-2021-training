@@ -822,7 +822,7 @@ $config['s3fs.settings']['use_https'] = FALSE;
 $config['s3fs.settings']['public_folder'] = 's3fs-public';
 $config['s3fs.settings']['private_folder'] = 's3fs-private';
 $config['s3fs.settings']['use_cname'] = TRUE;
-$config['s3fs.settings']['domain'] = $_SERVER['HTTP_HOST'];
+$config['s3fs.settings']['domain'] = 'cdn.govcon2021.mobomo.net';
 
 $settings['php_storage']['twig']['directory'] = '../storage/php/default';
 $settings['config_sync_directory'] = '../config';
