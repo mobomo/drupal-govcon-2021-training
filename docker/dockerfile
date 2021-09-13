@@ -23,6 +23,8 @@ RUN apk update && apk upgrade && apk add \
 	php7-xml \
 	php7-ctype \
 	mysql-client \
+	'memcached=~1.6' \
+	'php7-pecl-memcache=~4.0' \
 	curl \
 	&& curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer  \
 	&& composer global require drush/drush:~10 \

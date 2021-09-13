@@ -3,7 +3,8 @@ version: '3'
 services:
     web:
         container_name: '${PROJECT_NAME}_web'
-        image: mobomo/govcon2021-baseimage:1.0.13
+        build:
+          context: ./docker
         volumes:
             - ./drupal/public_html:/var/www/public_html
             - ./drupal/storage:/var/www/storage
@@ -35,6 +36,14 @@ services:
             - devcon-local
         env_file:
             - .env
+
+    memcache:
+        container_name: '${PROJECT_NAME}_memcache'
+        image: memcached:1.6.10-buster
+        ports:
+          - '11211:11211'
+        networks:
+            - devcon-local
 
 volumes:
     sql:
