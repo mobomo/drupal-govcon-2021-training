@@ -86,9 +86,10 @@ Resources:
       IamInstanceProfile: !Ref IAMRole
       ImageId: ami-0c2b8ca1dad447f8a
       InstanceType: t3.small
-      KeyName: devcon-bastion
+      KeyName: cloud9
       SecurityGroupIds: 
         - !Ref WebSecurityGroup
+        - !Ref DefaultSecurityGroupId
       SubnetId: subnet-1d426442
       Tags: 
         -
@@ -110,22 +111,15 @@ Resources:
         sudo mkdir /var/app -p
 
         # Setup key for git access, and .env file
-        aws s3 cp s3://drupal-govcon-2021/devcon-bastion.pem ~/.ssh/devcon-bastion.pem
         aws s3 cp s3://drupal-govcon-2021/.env /tmp/.env
-        sudo chmod 0400 ~/.ssh/devcon-bastion.pem
-
-        # allow access from cloud9
-        aws s3 cp s3://drupal-govcon-2021/id_rsa.pub - > ~/.ssh/authorized_keys
 
         # clone repo
-        GIT_SSH_COMMAND="ssh -i ~/.ssh/devcon-bastion.pem -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no" git clone git@github.com:mobomo/drupal-govcon-2021-training.git /var/app
+        git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
 
         # startup docker-compose
         sudo mv /tmp/.env /var/app/.env
         cd /var/app/
         docker-compose up --build -d
-
-        docker run -p 8080:8080 -d -v /var/app/:/home/coder/project mobomo/vscode_php:1.2.0
 
         # run drupal install
         docker exec devcon_web sh -c "/bootstrap/install-drupal.sh"
@@ -145,6 +139,10 @@ Outputs:
     Description: Public IP of Webserver
     Value: !GetAtt EC2Instance.PublicIp
 
+  InstancePrivateIP:
+    Description: Private IP of Webserver
+    Value: !GetAtt EC2Instance.PrivateIp
+    
   WebSecurityGroupID:
     Description: Security Group ID for Web SG that allows ingress on port 80 for webservers
     Value: !GetAtt WebSecurityGroup.GroupId
