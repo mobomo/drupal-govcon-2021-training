@@ -21,8 +21,6 @@
         "drupal/core-recommended": "^9.2",
         "drupal/core-vendor-hardening": "^9.2",
         "drupal/lark": "^1.0",
-        "drupal/memcache": "^2.3",
-        "drupal/memcache_admin": "^2.3",
         "drush/drush": "~10"
     },
     "conflict": {
