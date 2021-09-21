@@ -111,7 +111,7 @@ Resources:
         sudo mkdir /var/app -p
 
         # Setup key for git access, and .env file
-        aws s3 cp s3://drupal-govcon-2021/.env /tmp/.env
+        aws s3 cp s3://drupal-govcon-2021/.env /tmp/step1.env
 
         # clone repo
         git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
