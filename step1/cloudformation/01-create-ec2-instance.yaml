@@ -109,15 +109,14 @@ Resources:
         
         # Setup app folder structure
         sudo mkdir /var/app -p
-
-        # Setup key for git access, and .env file
-        aws s3 cp s3://drupal-govcon-2021/.env /tmp/step1.env
-
+        
         # clone repo
         git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
+        
+        # Setup key for git access, and .env file
+        aws s3 cp s3://drupal-govcon-2021/.env /var/app/step1/.env
 
         # startup docker-compose
-        sudo mv /tmp/.env /var/app/.env
         cd /var/app/
         docker-compose up --build -d
 
