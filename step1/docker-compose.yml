@@ -4,10 +4,10 @@ services:
     web:
         container_name: '${PROJECT_NAME}_web'
         build:
-          context: ./docker
+          context: ../
         volumes:
-            - ./docker/drupal/storage:/var/www/drupal/web/sites/default/files
-            - ./docker/drupal/config:/var/www/drupal/config
+            - ./step1/docker/drupal/storage:/var/www/drupal/web/sites/default/files
+            - ./step1/docker/drupal/config:/var/www/drupal/config
         links:
             - db:db
         ports:
