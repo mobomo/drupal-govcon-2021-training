@@ -34,13 +34,13 @@ RUN apk update && apk upgrade && apk add \
 	&& sed -rie 's|;error_log = log/php7/error.log|error_log = /dev/stdout|g' /etc/php7/php-fpm.conf 
 
 # setup apache
-COPY docker/apache.conf /etc/apache2/httpd.conf
-COPY docker/php-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY docker/php.ini /etc/php7/php.ini
+COPY step1/docker/apache.conf /etc/apache2/httpd.conf
+COPY step1/docker/php-pool.conf /etc/php7/php-fpm.d/www.conf
+COPY step1/docker/php.ini /etc/php7/php.ini
 
 # setup entrypoint file and apply execution rights
-ADD docker/entrypoint.sh /bootstrap/entrypoint.sh
-ADD docker/install-drupal.sh /bootstrap/install-drupal.sh
+ADD step1/docker/entrypoint.sh /bootstrap/entrypoint.sh
+ADD step1/docker/install-drupal.sh /bootstrap/install-drupal.sh
 
 # expose on port 80 and set workdir
 EXPOSE 80
