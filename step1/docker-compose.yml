@@ -5,6 +5,7 @@ services:
         container_name: '${PROJECT_NAME}_web'
         build:
           context: ../
+          dockerfile: docker/dockerfile
         volumes:
             - ./step1/docker/drupal/storage:/var/www/drupal/web/sites/default/files
             - ./step1/docker/drupal/config:/var/www/drupal/config
