@@ -117,7 +117,7 @@ Resources:
         aws s3 cp s3://drupal-govcon-2021/.env /var/app/step1/.env
 
         # startup docker-compose
-        cd /var/app/
+        cd /var/app/step1
         docker-compose up --build -d
 
         # run drupal install

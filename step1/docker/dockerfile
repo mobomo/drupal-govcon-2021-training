@@ -34,17 +34,17 @@ RUN apk update && apk upgrade && apk add \
 	&& sed -rie 's|;error_log = log/php7/error.log|error_log = /dev/stdout|g' /etc/php7/php-fpm.conf 
 
 # setup apache
-COPY apache.conf /etc/apache2/httpd.conf
-COPY php-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY php.ini /etc/php7/php.ini
+COPY docker/apache.conf /etc/apache2/httpd.conf
+COPY docker/php-pool.conf /etc/php7/php-fpm.d/www.conf
+COPY docker/php.ini /etc/php7/php.ini
 
 # setup entrypoint file and apply execution rights
-ADD ./entrypoint.sh /bootstrap/entrypoint.sh
-ADD ./install-drupal.sh /bootstrap/install-drupal.sh
+ADD docker/entrypoint.sh /bootstrap/entrypoint.sh
+ADD docker/install-drupal.sh /bootstrap/install-drupal.sh
 
 # expose on port 80 and set workdir
 EXPOSE 80
-WORKDIR /var/www
+WORKDIR /var/www/drupal
 	
 # Install Composer
 RUN	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
@@ -63,7 +63,8 @@ COPY --chown=http:http drupal /var/www/drupal
 # Run Composer Install
 RUN cd /var/www/drupal && composer install
 
-# Copy settings.php
+# Move settings.php
+RUN cd /var/www/drupal && mv settings.php sites/default/
 
 # Change to root user
 USER root
