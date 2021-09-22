@@ -112,7 +112,7 @@ Resources:
         chown 1000:1000 /var/app
         
         # clone repo
-        sudo -u ec2-user git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
+        sudo -u 1000 git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
         
         # Setup key for git access, and .env file
         aws s3 cp s3://drupal-govcon-2021/.env /var/app/step1/.env
@@ -120,9 +120,6 @@ Resources:
         # startup docker-compose
         cd /var/app
         docker-compose -f step1/docker-compose.yml up --build -d
-
-        # fix file permissions
-        # docker exec govcon2021_web sh -c "chown -R 1000:1000 /var/www/drupal/config && chown 1000:1000 /var/www/drupal/web/sites/default/files"
 
         # run drupal install
         docker exec -u http govcon2021_web sh -c "/bootstrap/install-drupal.sh"
