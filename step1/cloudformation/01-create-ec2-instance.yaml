@@ -114,14 +114,14 @@ Resources:
         git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
         
         # Setup key for git access, and .env file
-        aws s3 cp s3://drupal-govcon-2021/.env /var/app/.env
+        aws s3 cp s3://drupal-govcon-2021/.env /var/app/step1/.env
 
         # startup docker-compose
         cd /var/app
-        docker-compose up --build -d
+        docker-compose -f step1/docker-compose.yml up --build -d
 
         # run drupal install
-        docker exec devcon_web sh -c "/bootstrap/install-drupal.sh"
+        docker exec govcon2021_web sh -c "/bootstrap/install-drupal.sh"
 
   DNS:
     Type: AWS::Route53::RecordSet
