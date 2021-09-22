@@ -121,7 +121,7 @@ Resources:
         docker-compose -f step1/docker-compose.yml up --build -d
 
         # run drupal install
-        docker exec govcon2021_web sh -c "/bootstrap/install-drupal.sh"
+        docker exec -u http govcon2021_web sh -c "/bootstrap/install-drupal.sh"
 
   DNS:
     Type: AWS::Route53::RecordSet
