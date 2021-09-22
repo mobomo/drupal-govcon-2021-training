@@ -98,20 +98,20 @@ Resources:
       UserData:
         !Base64 |
         #!/bin/sh -xe
-        sudo yum update -y && sudo yum install -y docker git mysql
+        yum update -y && yum install -y docker git mysql
 
         # Install docker-compose and setup docker
-        sudo service docker start
-        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        sudo chmod +x /usr/local/bin/docker-compose
-        sudo usermod -aG docker ec2-user
-        sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+        service docker start
+        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+        usermod -aG docker ec2-user
+        ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
         
         # Setup app folder structure
-        sudo mkdir /var/app -p
+        mkdir /var/app -p
         
         # clone repo
-        git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
+        sudo -u ec2-user git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
         
         # Setup key for git access, and .env file
         aws s3 cp s3://drupal-govcon-2021/.env /var/app/step1/.env
@@ -119,6 +119,9 @@ Resources:
         # startup docker-compose
         cd /var/app
         docker-compose -f step1/docker-compose.yml up --build -d
+
+        # fix file permissions
+        docker exec govcon2021_web sh -c "chown -R http:http /var/www/drupal/config && chown http:http /var/www/drupal/web/sites/default/files"
 
         # run drupal install
         docker exec -u http govcon2021_web sh -c "/bootstrap/install-drupal.sh"
