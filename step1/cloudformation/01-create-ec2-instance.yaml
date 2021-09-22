@@ -109,6 +109,7 @@ Resources:
         
         # Setup app folder structure
         mkdir /var/app -p
+        chown 1000:1000 /var/app
         
         # clone repo
         sudo -u ec2-user git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
@@ -121,7 +122,7 @@ Resources:
         docker-compose -f step1/docker-compose.yml up --build -d
 
         # fix file permissions
-        docker exec govcon2021_web sh -c "chown -R http:http /var/www/drupal/config && chown http:http /var/www/drupal/web/sites/default/files"
+        # docker exec govcon2021_web sh -c "chown -R 1000:1000 /var/www/drupal/config && chown 1000:1000 /var/www/drupal/web/sites/default/files"
 
         # run drupal install
         docker exec -u http govcon2021_web sh -c "/bootstrap/install-drupal.sh"
