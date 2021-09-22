@@ -7,8 +7,8 @@ services:
           context: ../
           dockerfile: ./step1/docker/dockerfile
         volumes:
-            - ./step1/docker/drupal/storage:/var/www/drupal/web/sites/default/files
-            - ./step1/docker/drupal/config:/var/www/drupal/config
+            - ./drupal/storage:/var/www/drupal/web/sites/default/files
+            - ./drupal/config:/var/www/drupal/config
         links:
             - db:db
         ports:
