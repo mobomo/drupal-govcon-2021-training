@@ -65,7 +65,7 @@ COPY --chown=http:http drupal /var/www/drupal
 RUN cd /var/www/drupal && composer install
 
 # Move settings.php
-#RUN cd /var/www/drupal && mv settings.php sites/default/
+RUN cd /var/www/drupal && mv settings.php web/sites/default/
 
 # Change to root user
 USER root
