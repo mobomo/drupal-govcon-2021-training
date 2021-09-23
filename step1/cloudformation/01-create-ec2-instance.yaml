@@ -116,7 +116,7 @@ Resources:
         
         # Setup key for git access, and .env file
         aws s3 cp s3://drupal-govcon-2021/step1.env /var/app/step1/.env
-        aws s3 cp s3://drupal-govcon-2021/step2.env /var/app/step2/.env
+        aws s3 cp s3://drupal-govcon-2021/step2.env /var/app/step2-rds/.env
 
         # startup docker-compose
         cd /var/app
