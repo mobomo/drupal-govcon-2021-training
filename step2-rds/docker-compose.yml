@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+    web:
+        container_name: '${PROJECT_NAME}_web'
+        build:
+          context: ../
+          dockerfile: ./step2/docker/dockerfile
+        volumes:
+            - ../drupal/storage:/var/www/drupal/web/sites/default/files
+            - ../drupal/config:/var/www/drupal/config
+        links:
+            - db:db
+        ports:
+            - '80:80'
+        env_file:
+            - .env
+        networks:
+            - govcon-local
+
+networks:
+    govcon-local:
+        driver: bridge

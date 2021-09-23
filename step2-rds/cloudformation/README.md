@@ -22,7 +22,7 @@ export $(grep -v '^#' .env | xargs -d '\n')
 
 # create drupal user and provide neccessary privileges
 echo "CREATE DATABASE drupal;" | mysql -h db.govcon2021.mobomo.net -udrupalmaster -ptestingpass 
-echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" | mysql -h db.govcon2021.mobomo.net -udrupalmaster -ptestingpass 
+echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';" | mysql -h db.govcon2021.mobomo.net -udrupalmaster -ptestingpass
 echo "GRANT ALL PRIVILEGES ON $MYSQL_DATABASE.* TO '$MYSQL_USER'@'%';" | mysql -h db.govcon2021.mobomo.net -udrupalmaster -ptestingpass 
 echo "FLUSH PRIVILEGES;" | mysql -h db.govcon2021.mobomo.net -udrupalmaster -ptestingpass 
 
