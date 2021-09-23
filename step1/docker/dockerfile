@@ -53,18 +53,14 @@ RUN	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/lo
 # Change to httpd user
 USER http
 
-# Install Drush
-RUN composer global require drush/drush:~10 \
-	&& composer clearcache
-
 # Copy Drupal
 COPY --chown=http:http drupal /var/www/drupal
 
-# Run Composer Install
-RUN cd /var/www/drupal && composer install
-
-# Move settings.php
-RUN cd /var/www/drupal && mv settings.php web/sites/default/
+# Install Drush, Run Composer Install, and move settings.php
+RUN composer global require drush/drush:~10 \
+	&& composer clearcache \
+    && cd /var/www/drupal && composer install
+    && cd /var/www/drupal && mv settings.php web/sites/default/
 
 # Change to root user
 USER root
