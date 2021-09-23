@@ -18,6 +18,14 @@ services:
         networks:
             - govcon-local
 
+    memcache:
+        container_name: '${PROJECT_NAME}_memcache'
+        image: memcached:1.6.10-buster
+        ports:
+          - '11211:11211'
+        networks:
+            - govcon-local
+
 networks:
     govcon-local:
         driver: bridge
