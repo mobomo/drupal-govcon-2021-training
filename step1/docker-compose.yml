@@ -9,6 +9,7 @@ services:
         volumes:
             - ../drupal/storage:/var/www/drupal/web/sites/default/files
             - ../drupal/config:/var/www/drupal/config
+            - ../drupal/modules/custom:/var/www/drupal/web/modules/custom
         links:
             - db:db
         ports:
@@ -30,7 +31,6 @@ services:
             MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
         volumes:
             - sql:/var/lib/mysql
-            - ./docker/db/manual_sql_dumps:/var/lib/mysql/dumps
         command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
         networks:
             - govcon-local
