@@ -5,7 +5,7 @@ echo 'installing drupal'
 cd /var/www/drupal
 
 # wait for database to bootstrap itself before we attempt to run the install command
-sleep 10
+while ! nc -w 2 -z $MYSQL_HOST 3306; do sleep 1; done
 
 drush --root=/var/www/drupal/web site-install minimal -vv --account-name=admin --account-pass=admin --yes --existing-config
 
