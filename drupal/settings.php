@@ -805,6 +805,7 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 
 $settings['trusted_host_patterns'] = [
   '^govcon2021\.mobomo\.net$',
+  '^localhost$'
 ];
 
 
