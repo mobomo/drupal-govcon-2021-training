@@ -30,20 +30,11 @@ services:
             MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
         volumes:
             - sql:/var/lib/mysql
-            - ./docker/db/manual_sql_dumps:/var/lib/mysql/dumps
         command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
         networks:
             - govcon-local
         env_file:
             - .env
-
-    memcache:
-        container_name: '${PROJECT_NAME}_memcache'
-        image: memcached:1.6.10-buster
-        ports:
-          - '11211:11211'
-        networks:
-            - govcon-local
 
 volumes:
     sql:
