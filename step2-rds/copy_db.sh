@@ -3,6 +3,6 @@ WEBSERVER_IP=$(aws cloudformation describe-stacks --stack-name phase1-webserver 
 
 echo $WEBSERVER_IP
 
-echo "CREATE DATABASE drupal;" | mysql -h db.govcon2021.mobomo.net -udrupalmaster -ptestingpass 
+echo "CREATE DATABASE ${MYSQL_DATABASE}" | mysql -h db.govcon2021.mobomo.net -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PASSWORD}
 
-ssh -t $WEBSERVER_IP docker exec -it govcon2021_web drush --root=/var/www/drupal sql-dump | pv | mysql -h db.govcon2021.mobomo.net -udrupalmaster -ptestingpass drupal
+ssh -t $WEBSERVER_IP docker exec -it govcon2021_web drush --root=${DRUPAL_ROOT} sql-dump | pv | mysql -h ${MYSQL_HOST} -u${MYSQL_ROOT_USER} -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE}
