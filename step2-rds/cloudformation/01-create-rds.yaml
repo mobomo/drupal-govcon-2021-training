@@ -92,7 +92,7 @@ Resources:
     Properties:
       MasterUsername: !Ref MasterUsername
       MasterUserPassword: !Ref MasterPassword
-      Engine: aurora
+      Engine: aurora-mysql
       DBSubnetGroupName: !Ref DBSubnetGroup
       VpcSecurityGroupIds:
         - !Ref ClusterSecurityGroup
@@ -104,7 +104,7 @@ Resources:
       DBInstanceClass: !Ref DBInstanceClass
       DBParameterGroupName: !Ref DBParameterGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
-      Engine: aurora
+      Engine: aurora-mysql
       PubliclyAccessible: false
 
 # Commented out due to added costs. This would be highly recommended for a production grade site
