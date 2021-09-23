@@ -76,7 +76,7 @@ Resources:
     Type: "AWS::RDS::DBParameterGroup"
     Properties:
       Description: "DB Parameter Group for Drupal"
-      Family: aurora5.6
+      Family: aurora-mysql5.7
       Parameters:
         max_allowed_packet: 67108864
         slow_query_log: 1
