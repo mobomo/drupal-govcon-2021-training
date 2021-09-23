@@ -115,12 +115,12 @@ Resources:
         sudo -u "#1000" git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
         
         # Setup key for git access, and .env file
-        aws s3 cp s3://drupal-govcon-2021/step1.env /var/app/step1/.env
-        aws s3 cp s3://drupal-govcon-2021/step2.env /var/app/step2-rds/.env
+        aws s3 cp s3://drupal-govcon-2021/phase1.env /var/app/phase1/.env
+        aws s3 cp s3://drupal-govcon-2021/phase2.env /var/app/phase2/.env
 
         # startup docker-compose
         cd /var/app
-        docker-compose -f step1/docker-compose.yml up --build -d
+        docker-compose -f phase1/docker-compose.yml up --build -d
 
         # run drupal install
         docker exec -u http govcon2021_web sh -c "/bootstrap/install-drupal.sh"

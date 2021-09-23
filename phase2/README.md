@@ -1,4 +1,6 @@
-aws cloudformation create-stack --stack-name phase2-rds --template-body file://${PWD}/step2-rds/cloudformation/01-create-rds.yaml \
+WIP: this needs to be updated
+
+aws cloudformation create-stack --stack-name phase2-rds --template-body file://${PWD}/phase2/cloudformation/01-create-rds.yaml \
 --parameters \
 ParameterKey=DefaultSecurityGroupId,ParameterValue=sg-af2496b0 \
 ParameterKey=DBInstanceClass,ParameterValue=db.t3.small \
@@ -7,7 +9,7 @@ ParameterKey=MasterPassword,ParameterValue=testingpass
 
 
 
-# ssh to new ec2 host by grabbing private IP from step1 cloudformation outputs
+# ssh to new ec2 host by grabbing private IP from phase1 cloudformation outputs
 ssh ec2-user@
 
 

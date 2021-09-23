@@ -43,12 +43,12 @@ RUN apk update && apk upgrade && apk add \
 	&& sed -rie 's|;error_log = log/php7/error.log|error_log = /dev/stdout|g' /etc/php7/php-fpm.conf 
 
 # setup apache
-COPY step1/docker/apache.conf /etc/apache2/httpd.conf
-COPY step1/docker/php-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY step1/docker/php.ini /etc/php7/php.ini
+COPY phase1/docker/apache.conf /etc/apache2/httpd.conf
+COPY phase1/docker/php-pool.conf /etc/php7/php-fpm.d/www.conf
+COPY phase1/docker/php.ini /etc/php7/php.ini
 
 # setup entrypoint file
-ADD step1/docker/scripts /bootstrap/
+ADD phase1/docker/scripts /bootstrap/
 
 # expose on port 80 and set workdir
 EXPOSE 80

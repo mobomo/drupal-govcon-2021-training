@@ -2,7 +2,7 @@ AWSTemplateFormatVersion: "2010-09-09"
 
 Parameters:
   DefaultSecurityGroupId:
-    Description: ID of web security group made in step1
+    Description: ID of web security group made in phase1
     Type: String
 
   DBInstanceClass:
@@ -61,7 +61,7 @@ Resources:
       FromPort: 3306
       ToPort: 3306
       GroupId: !GetAtt ClusterSecurityGroup.GroupId
-      Description: Allow ingress to RDS from WebSecurityGroup from step1 CF stack
+      Description: Allow ingress to RDS from WebSecurityGroup from phase1 CF stack
 
   DBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
