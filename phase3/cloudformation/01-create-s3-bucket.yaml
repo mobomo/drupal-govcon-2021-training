@@ -1,10 +1,16 @@
 AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  BucketName:
+    Description: Name of the S3 Bucket
+    Type: String
+
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
       AccessControl: PublicRead
-      BucketName: drupal-devcon-2021-assets
+      BucketName: !Ref BucketName
   BucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -22,50 +28,3 @@ Resources:
                 - !Ref S3Bucket
                 - /*
       Bucket: !Ref S3Bucket
-
-  AssetCFDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties: 
-      DistributionConfig: 
-        Aliases: 
-        - cdn.govcon2021.mobomo.net
-        DefaultCacheBehavior: 
-          AllowedMethods: 
-          - GET
-          - HEAD
-          CachedMethods: 
-          - GET
-          - HEAD
-          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
-          Compress: true
-          TargetOriginId: myS3Origin
-          ViewerProtocolPolicy: redirect-to-https
-        Comment: String
-        Enabled: true
-        HttpVersion: http2
-        IPV6Enabled: true
-        Origins: 
-        - DomainName: drupal-devcon-2021-assets.s3.us-east-1.amazonaws.com
-          Id: myS3Origin
-          CustomOriginConfig:
-            HTTPPort: '80'
-            HTTPSPort: '443'
-            OriginProtocolPolicy: match-viewer
-            OriginSSLProtocols:
-              - TLSv1.2
-              - SSLv3
-        PriceClass: PriceClass_All
-        ViewerCertificate: 
-          AcmCertificateArn: arn:aws:acm:us-east-1:418040265006:certificate/f4463002-e9be-4c92-8063-81de15d50e79
-          MinimumProtocolVersion: TLSv1.2_2021
-          SslSupportMethod: sni-only
-
-  DNS:
-    Type: AWS::Route53::RecordSet
-    Properties:
-      HostedZoneId : Z01629752800X7928YLRP
-      Name: cdn.govcon2021.mobomo.net
-      ResourceRecords:
-      - !GetAtt [AssetCFDistribution, DomainName]
-      TTL: 60
-      Type: CNAME
