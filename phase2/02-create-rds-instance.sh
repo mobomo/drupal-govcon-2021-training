@@ -2,7 +2,7 @@
 
 CWD=$(dirname $0)
 
-aws cloudformation create-stack --stack-name phase2-rds --template-body file://${CWD}/cloudformation/01-create-rds.yaml \
+aws cloudformation create-stack --stack-name phase2-rds --template-body file://${CWD}/cloudformation/02-rds-instance.yaml \
 --parameters \
 ParameterKey=DefaultSecurityGroupId,ParameterValue=sg-af2496b0 \
 ParameterKey=DBInstanceClass,ParameterValue=db.t3.small \
