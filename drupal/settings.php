@@ -803,12 +803,18 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 #   include $app_root . '/' . $site_path . '/settings.local.php';
 # }
 
+## CUSTOMIZED SETTINGS
+
+# Trusted host patterns - https://www.drupal.org/docs/installing-drupal/trusted-host-settings
 $settings['trusted_host_patterns'] = [
   '^govcon2021\.mobomo\.net$',
   '^localhost$'
 ];
 
+# Config directory
+$settings['config_sync_directory'] = '../config';
 
+# Database settings
 $databases['default']['default'] = array (
   'database' => $_SERVER['MYSQL_DATABASE'],
   'username' => $_SERVER['MYSQL_USER'],
@@ -820,6 +826,7 @@ $databases['default']['default'] = array (
   'driver' => 'mysql',
 );
 
+# S3FS settings
 $settings['file_private_path'] = 'sites/default/files/private';
 $settings['s3fs.use_s3_for_public'] = TRUE;
 $settings['s3fs.use_s3_for_private'] = TRUE;
@@ -831,18 +838,18 @@ $config['s3fs.settings']['private_folder'] = 's3fs-private';
 $config['s3fs.settings']['use_cname'] = TRUE;
 $config['s3fs.settings']['domain'] = 'cdn.govcon2021.mobomo.net';
 
-$settings['php_storage']['twig']['directory'] = '../storage/php/default';
-$settings['config_sync_directory'] = '../config';
+#TBD
+# $settings['php_storage']['twig']['directory'] = '../storage/php/default'; - Ask about this
 
+# Memcache settings
 $settings['memcache']['servers'] = [$_SERVER['MEMCACHE_HOST'] . ":11211" => 'default'];
-$settings['memcache']['key_prefix'] = 'govcon2021';
+$settings['memcache']['key_prefix'] = [$_SERVER['PROJECT_NAME'];
 $settings['memcache']['bins'] = ['default' => 'default'];
 
 use Composer\Autoload\ClassLoader;
 
 $memcache_exists = class_exists('Memcache', FALSE);
 $memcached_exists = class_exists('Memcached', FALSE);
-
 $memcache_services_yml = DRUPAL_ROOT . '/modules/contrib/memcache/memcache.services.yml';
 $memcache_module_is_present = file_exists($memcache_services_yml);
 

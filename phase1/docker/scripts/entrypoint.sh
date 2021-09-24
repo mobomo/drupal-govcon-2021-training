@@ -1,12 +1,10 @@
 #!/bin/sh
 
-
-cd /var/www/drupal
-
-echo 'entrypoint of app'	
+echo 'entrypoint of app'
+cd ${DRUPAL_ROOT}
 
 echo 'fix file permissions'
-chown http:http /var/www/drupal
+chown http:http ${DRUPAL_ROOT}
 
 echo 'move settings into appropriate place'
 mv settings.php web/sites/default/settings.php

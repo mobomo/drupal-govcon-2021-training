@@ -7,9 +7,9 @@ services:
           context: ../
           dockerfile: ./phase1/docker/dockerfile
         volumes:
-            - ../drupal/storage:/var/www/drupal/web/sites/default/files
-            - ../drupal/config:/var/www/drupal/config
-            - ../drupal/modules/custom:/var/www/drupal/web/modules/custom
+            - ../drupal/storage:${DRUPAL_ROOT}/web/sites/default/files
+            - ../drupal/config:${DRUPAL_ROOT}/config
+            - ../drupal/modules/custom:${DRUPAL_ROOT}/web/modules/custom
         links:
             - db:db
         ports:

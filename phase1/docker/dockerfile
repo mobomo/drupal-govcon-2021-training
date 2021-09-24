@@ -52,15 +52,15 @@ ADD phase1/docker/scripts /bootstrap/
 
 # expose on port 80 and set workdir
 EXPOSE 80
-WORKDIR /var/www/drupal
+WORKDIR ${DRUPAL_ROOT}
 
 # Copy Drupal and dependencies from composer install above
-COPY --chown=http:http --from=drupal-builder /app/web /var/www/drupal/web
-COPY --chown=http:http --from=drupal-builder /app/vendor /var/www/drupal/vendor
+COPY --chown=http:http --from=drupal-builder /app/web ${DRUPAL_ROOT}/web
+COPY --chown=http:http --from=drupal-builder /app/vendor ${DRUPAL_ROOT}/vendor
 COPY --chown=http:http drupal .
 
 # Create symlink for drush
-RUN ln -s /var/www/drupal/vendor/drush/drush/drush /usr/local/bin/drush
+RUN ln -s ${DRUPAL_ROOT}/vendor/drush/drush/drush /usr/local/bin/drush
 
 # send it
 CMD ["/bootstrap/entrypoint.sh"]
