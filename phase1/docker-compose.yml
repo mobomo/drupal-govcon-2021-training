@@ -6,7 +6,7 @@ services:
         build:
           context: ../
           dockerfile: ./phase1/docker/dockerfile
-        args:
+          args:
             - DRUPAL_ROOT: ${DRUPAL_ROOT}
         volumes:
             - ../drupal/storage:${DRUPAL_ROOT}/web/sites/default/files
