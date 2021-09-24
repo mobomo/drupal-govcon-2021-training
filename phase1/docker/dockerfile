@@ -1,18 +1,9 @@
-FROM composer:2.1.8 AS drupal-builder
-
-#ARG DRUPAL_ROOT=/var/www/drupal
-ARG DRUPAL_ROOT
-ENV DRUPAL_ROOT=$DRUPAL_ROOT
-COPY drupal/composer.json .
-COPY drupal/composer.lock .
-
-RUN composer global require drush/drush:~10 \
-	&& composer install --ignore-platform-reqs \
-	&& composer clearcache
-
 FROM alpine:3.12.3 AS drupal
 
-# add all packages
+ARG DRUPAL_ROOT
+ENV DRUPAL_ROOT=$DRUPAL_ROOT
+
+# Add packages
 RUN apk update && apk upgrade && apk add \
 	apache2-proxy \
 	apache2-ssl \
@@ -45,12 +36,12 @@ RUN apk update && apk upgrade && apk add \
     && adduser -G http -u 1000 -s /bin/sh -D http \
 	&& sed -rie 's|;error_log = log/php7/error.log|error_log = /dev/stdout|g' /etc/php7/php-fpm.conf 
 
-# setup apache
+# Copy Apache and PHP configs
 COPY phase1/docker/apache.conf /etc/apache2/httpd.conf
 COPY phase1/docker/php-pool.conf /etc/php7/php-fpm.d/www.conf
 COPY phase1/docker/php.ini /etc/php7/php.ini
 
-# setup entrypoint file
+# Copy bootstrap scripts
 ADD phase1/docker/scripts /bootstrap/
 
 # expose on port 80 and set workdir
