@@ -1,7 +1,6 @@
 FROM composer:2.1.8 AS drupal-builder
 
-ENV DRUPAL_ROOT $DRUPAL_ROOT
-
+ARG DRUPAL_ROOT=/var/www/drupal
 COPY drupal/composer.json .
 COPY drupal/composer.lock .
 
