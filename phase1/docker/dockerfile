@@ -48,13 +48,25 @@ ADD phase1/docker/scripts /bootstrap/
 EXPOSE 80
 WORKDIR ${DRUPAL_ROOT}
 
-# Copy Drupal and dependencies from composer install above
-COPY --chown=http:http --from=drupal-builder /app/web ${DRUPAL_ROOT}/web
-COPY --chown=http:http --from=drupal-builder /app/vendor ${DRUPAL_ROOT}/vendor
-COPY --chown=http:http drupal .
+# Install Composer
+RUN	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+# Change to httpd user
+USER http
+
+# Copy Drupal
+COPY --chown=http:http drupal /var/www/drupal
+
+# Run Composer Install, and move settings.php
+RUN cd ${DRUPAL_ROOT} \
+    && composer install
+    && mv settings.php web/sites/default/
+
+# Change to root user
+USER root
 
 # Create symlink for drush
-RUN ln -s ${DRUPAL_ROOT}/vendor/drush/drush/drush /usr/local/bin/drush
+RUN ln -s  ${DRUPAL_ROOT}/vendor/bin/drush /usr/local/bin/drush
 
 # send it
 CMD ["/bootstrap/entrypoint.sh"]
