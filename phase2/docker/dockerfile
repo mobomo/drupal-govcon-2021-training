@@ -57,17 +57,16 @@ USER http
 # Copy Drupal
 COPY --chown=http:http drupal /var/www/drupal
 
-# Install Drush, Run Composer Install, and move settings.php
-RUN composer global require drush/drush:~10 \
-	&& composer clearcache \
-    && cd /var/www/drupal && composer install \
-    && cd /var/www/drupal && mv settings.php web/sites/default/
+# Run Composer Install, and move settings.php
+RUN cd ${DRUPAL_ROOT} \
+    && composer install \
+    && mv settings.php web/sites/default/
 
 # Change to root user
 USER root
 
 # Create symlink for drush
-RUN ln -s /home/http/.composer/vendor/bin/drush /usr/local/bin/drush
+RUN ln -s ${DRUPAL_ROOT}/vendor/bin/drush /usr/local/bin/drush
 
 # send it
 CMD ["/bootstrap/entrypoint.sh"]
