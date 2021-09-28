@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Parameters:
+  WebServerPublicIP:
+    Description: Public IP address of Drupal Web Server
+    Type: String
+
   DefaultSecurityGroupId:
     Description: ID of default security group in your VPC
     Type: String
@@ -117,7 +121,7 @@ Resources:
         # download .env file
         aws s3 cp s3://drupal-govcon-2021/phase5.env /var/app/phase5/.env
 
-        docker run -d -p 80:80 -v $(PWD)/nginx.conf:/etc/nginx/templates/default.conf.template -e $(PWD)/.env nginx:1.19.6-alpine
+        docker run -d -p 80:80 -v $(pwd)/nginx.conf:/etc/nginx/templates/default.conf.template --env-file $(pwd)/.env nginx:1.19.6-alpine
 
   DNS:
     Type: AWS::Route53::RecordSet
@@ -126,6 +130,16 @@ Resources:
       Name: www.govcon2021.mobomo.net
       ResourceRecords:
       - !GetAtt EC2Instance.PublicIp
+      TTL: 60
+      Type: A
+
+  CMSDNS:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : Z01629752800X7928YLRP
+      Name: cms.govcon2021.mobomo.net
+      ResourceRecords:
+      - !Ref WebServerPublicIP
       TTL: 60
       Type: A
 
