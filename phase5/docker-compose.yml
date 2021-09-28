@@ -15,7 +15,7 @@ services:
         links:
             - db:db
         ports:
-            - '80:80'
+            - '8080:80'
         env_file:
             - .env
         networks:
@@ -34,6 +34,28 @@ services:
         volumes:
             - sql:/var/lib/mysql
         command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+        networks:
+            - govcon-local
+        env_file:
+            - .env
+
+    memcache:
+        container_name: '${PROJECT_NAME}_memcache'
+        image: memcached:1.6.10-buster
+        ports:
+          - '11211:11211'
+        networks:
+            - govcon-local
+
+    nginx:
+        container_name: '${PROJECT_NAME}_nginx'
+        image: nginx:1.19.6-alpine
+        links:
+          - "web:web"
+        ports:
+          - '80:80'
+        volumes:
+          - ./nginx.conf:/etc/nginx/templates/default.conf.template
         networks:
             - govcon-local
         env_file:

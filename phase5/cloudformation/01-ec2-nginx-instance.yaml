@@ -9,7 +9,7 @@ Resources:
   IAMRole:
     Type: "AWS::IAM::Role"
     Properties:
-      RoleName: web-role
+      RoleName: nginx-role
       Description: "IAM Role applied to web servers"
       MaxSessionDuration: 3600
       Path: "/"
@@ -39,7 +39,7 @@ Resources:
   IAMInstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
     Properties:
-      InstanceProfileName: web-role
+      InstanceProfileName: nginx-role
       Path: "/"
       Roles:
         - Ref: "IAMRole"
@@ -94,18 +94,15 @@ Resources:
       Tags: 
         -
           Key: Name
-          Value: Phase One
+          Value: Phase 5 Nginx
       UserData:
         !Base64 |
         #!/bin/sh -xe
-        yum update -y && yum install -y docker git mysql
+        yum update -y && yum install -y docker git
 
         # Install docker-compose and setup docker
         service docker start
-        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-        chmod +x /usr/local/bin/docker-compose
         usermod -aG docker ec2-user
-        ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
         
         # Setup app folder structure
         mkdir /var/app -p
@@ -113,27 +110,20 @@ Resources:
         
         # clone repo
         sudo -u "#1000" git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
-        
-        # Download env file(s)
-        aws s3 cp s3://drupal-govcon-2021/phase1.env /var/app/phase1/.env
-        aws s3 cp s3://drupal-govcon-2021/phase2.env /var/app/phase2/.env
-        aws s3 cp s3://drupal-govcon-2021/phase3.env /var/app/phase3/.env
 
-        # Export environment variables
-        set -a && source /var/app/phase1/.env && set +a
+        # start nginx volume mounting configuration file from phase 5
+        cd /var/app/phase5
 
-        # startup docker-compose
-        cd /var/app
-        docker-compose -f phase1/docker-compose.yml up --build -d
+        # download .env file
+        aws s3 cp s3://drupal-govcon-2021/phase5.env /var/app/phase5/.env
 
-        # run drupal install
-        docker exec -u http govcon2021_web sh -c "/bootstrap/install-drupal.sh"
+        docker run -d -p 80:80 -v $(PWD)/nginx.conf:/etc/nginx/templates/default.conf.template -e $(PWD)/.env nginx:1.19.6-alpine
 
   DNS:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : Z01629752800X7928YLRP
-      Name: govcon2021.mobomo.net
+      Name: www.govcon2021.mobomo.net
       ResourceRecords:
       - !GetAtt EC2Instance.PublicIp
       TTL: 60
