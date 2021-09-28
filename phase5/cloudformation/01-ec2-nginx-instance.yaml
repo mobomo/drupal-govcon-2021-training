@@ -1,6 +1,10 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Parameters:
+  WebServerPublicIP:
+    Description: Public IP address of Drupal Web Server
+    Type: String
+
   DefaultSecurityGroupId:
     Description: ID of default security group in your VPC
     Type: String
@@ -126,6 +130,16 @@ Resources:
       Name: www.govcon2021.mobomo.net
       ResourceRecords:
       - !GetAtt EC2Instance.PublicIp
+      TTL: 60
+      Type: A
+
+  CMSDNS:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : Z01629752800X7928YLRP
+      Name: cms.govcon2021.mobomo.net
+      ResourceRecords:
+      - !Ref WebServerPublicIP
       TTL: 60
       Type: A
 
