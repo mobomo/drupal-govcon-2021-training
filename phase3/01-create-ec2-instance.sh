@@ -1,6 +1,7 @@
 #!/bin/bash -xe
 
 CWD=$(dirname $0)
+set -a && source ${CWD}/.env && set +a
 
 aws cloudformation create-stack --stack-name phase1-webserver \
  --template-body file://${CWD}/cloudformation/01-ec2-instance.yaml \

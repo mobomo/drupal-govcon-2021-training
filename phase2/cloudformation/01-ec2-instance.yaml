@@ -114,7 +114,7 @@ Resources:
         # clone repo
         sudo -u "#1000" git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
         
-        # Setup key for git access, and .env file
+        # copy .env file
         aws s3 cp s3://drupal-govcon-2021/phase1.env /var/app/phase1/.env
         aws s3 cp s3://drupal-govcon-2021/phase2.env /var/app/phase2/.env
 
