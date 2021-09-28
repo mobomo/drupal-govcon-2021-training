@@ -12,17 +12,12 @@ services:
             - ../drupal/storage:${DRUPAL_ROOT}/web/sites/default/files
             - ../drupal/config:${DRUPAL_ROOT}/config
             - ../drupal/modules/custom:${DRUPAL_ROOT}/web/modules/custom
-        links:
-            - db:db
         ports:
             - '80:80'
         env_file:
             - .env
         networks:
             - govcon-local
-
-volumes:
-    sql:
 
 networks:
     govcon-local:
