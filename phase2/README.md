@@ -14,7 +14,7 @@ ssh ec2-user@
 
 
 # now with the new database in place, lets create a current backup utilizing drush
-docker exec -it devcon_web drush --root=/var/www/public_html sql-dump | gzip > /home/ec2-user/dump.sql.gz
+docker exec -it govcon_web drush --root=/var/www/public_html sql-dump | gzip > /home/ec2-user/dump.sql.gz
 
 # update db host in .env file
 sudo sed -i -e 's/MYSQL_HOST=db/MYSQL_HOST=db.govcon2021.mobomo.net/g' /var/app/.env

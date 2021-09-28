@@ -6,7 +6,7 @@ aws cloudformation create-stack --stack-name phase3-s3 --template-body file://${
 
 1. Back on EC2 Server, Go into container in order to run commands to include s3fs
 
-docker exec -it devcon_web sh
+docker exec -it govcon_web sh
 
 2. change into web root so composer works
 
