@@ -31,8 +31,8 @@ Resources:
                 Action: 
                   - "s3:*"
                 Resource: 
-                  - "arn:aws:s3:::drupal-devcon-2021-assets"
-                  - "arn:aws:s3:::drupal-devcon-2021-assets/*"
+                  - "arn:aws:s3:::drupal-govcon-2021-assets"
+                  - "arn:aws:s3:::drupal-govcon-2021-assets/*"
                   - "arn:aws:s3:::drupal-govcon-2021"
                   - "arn:aws:s3:::drupal-govcon-2021/*"
 
