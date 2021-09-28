@@ -56,7 +56,7 @@ RUN	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/lo
 USER http
 
 # Copy Drupal
-COPY --chown=http:http drupal /var/www/drupal
+COPY --chown=http:http drupal ${DRUPAL_ROOT}
 
 # Run Composer Install, and move settings.php
 RUN cd ${DRUPAL_ROOT} \
@@ -67,7 +67,7 @@ RUN cd ${DRUPAL_ROOT} \
 USER root
 
 # Create symlink for drush
-RUN ln -s  ${DRUPAL_ROOT}/vendor/bin/drush /usr/local/bin/drush
+RUN ln -s ${DRUPAL_ROOT}/vendor/bin/drush /usr/local/bin/drush
 
 # send it
 CMD ["/bootstrap/entrypoint.sh"]

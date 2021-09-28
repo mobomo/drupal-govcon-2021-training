@@ -47,6 +47,7 @@ ADD phase2/docker/scripts /bootstrap/
 # expose on port 80 and set workdir
 EXPOSE 80
 WORKDIR ${DRUPAL_ROOT}
+RUN chown 1000:1000 ${DRUPAL_ROOT}
 
 # Install Composer
 RUN	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
@@ -55,7 +56,7 @@ RUN	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/lo
 USER http
 
 # Copy Drupal
-COPY --chown=http:http drupal /var/www/drupal
+COPY --chown=http:http drupal ${DRUPAL_ROOT}
 
 # Run Composer Install, and move settings.php
 RUN cd ${DRUPAL_ROOT} \
