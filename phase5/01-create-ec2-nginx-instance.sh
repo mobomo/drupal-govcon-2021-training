@@ -8,6 +8,7 @@ WEBSERVER_IP=$(aws cloudformation describe-stacks --stack-name phase1-webserver 
 aws cloudformation create-stack --stack-name phase5-nginx \
  --template-body file://${CWD}/cloudformation/01-ec2-nginx-instance.yaml \
  --capabilities CAPABILITY_NAMED_IAM \
- --parameters ParameterKey=DefaultSecurityGroupId,ParameterValue=sg-af2496b0 \
- --parameters ParameterKey=WebServerPublicIP,ParameterValue=${WEBSERVER_IP} \
+ --parameters \
+ ParameterKey=DefaultSecurityGroupId,ParameterValue=sg-af2496b0 \
+ ParameterKey=WebServerPublicIP,ParameterValue=${WEBSERVER_IP} \
  --region us-east-1
