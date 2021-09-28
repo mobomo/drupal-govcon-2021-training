@@ -808,6 +808,8 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 # Trusted host patterns - https://www.drupal.org/docs/installing-drupal/trusted-host-settings
 $settings['trusted_host_patterns'] = [
   '^govcon2021\.mobomo\.net$',
+  '^cms\.govcon2021\.mobomo\.net$',
+  '^www\.govcon2021\.mobomo\.net$',
   '^localhost$'
 ];
 
