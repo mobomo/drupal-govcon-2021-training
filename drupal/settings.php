@@ -843,7 +843,7 @@ $config['s3fs.settings']['domain'] = 'cdn.govcon2021.mobomo.net';
 
 # Memcache settings
 $settings['memcache']['servers'] = [$_SERVER['MEMCACHE_HOST'] . ":11211" => 'default'];
-$settings['memcache']['key_prefix'] = [$_SERVER['PROJECT_NAME'];
+$settings['memcache']['key_prefix'] = $_SERVER['PROJECT_NAME'];
 $settings['memcache']['bins'] = ['default' => 'default'];
 
 use Composer\Autoload\ClassLoader;
