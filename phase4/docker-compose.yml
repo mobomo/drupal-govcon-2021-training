@@ -5,7 +5,7 @@ services:
         container_name: '${PROJECT_NAME}_web'
         build:
           context: ../
-          dockerfile: ./phase1/docker/dockerfile
+          dockerfile: ./phase4/docker/dockerfile
           args:
             - DRUPAL_ROOT=${DRUPAL_ROOT}
         volumes:
