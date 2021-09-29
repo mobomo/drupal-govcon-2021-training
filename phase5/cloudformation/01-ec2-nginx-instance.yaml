@@ -110,7 +110,10 @@ Resources:
 
         # Install docker-compose and setup docker
         service docker start
+        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
         usermod -aG docker ec2-user
+        ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
         
         # Setup app folder structure
         mkdir /var/app -p
@@ -119,14 +122,17 @@ Resources:
         # clone repo
         sudo -u "#1000" git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
 
-        # start nginx volume mounting configuration file from phase 5
-        cd /var/app/phase5
-
         # download .env file
         aws s3 cp s3://drupal-govcon-2021/phase5.env /var/app/phase5/.env
 
+        # Export environment variables
+        set -a && source /var/app/phase5/.env && set +a
+
+        # start nginx volume mounting configuration file from phase 5
+        cd /var/app/phase5
+
         # start container
-        docker-compose -f phase1/docker-compose.yml up --build -d
+        docker-compose up -d
 
   PublicWWWDNS:
     Type: AWS::Route53::RecordSet

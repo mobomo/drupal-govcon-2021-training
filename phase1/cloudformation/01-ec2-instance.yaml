@@ -106,14 +106,14 @@ Resources:
         chmod +x /usr/local/bin/docker-compose
         usermod -aG docker ec2-user
         ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-        
+  
         # Setup app folder structure
         mkdir /var/app -p
         chown 1000:1000 /var/app
-        
+  
         # clone repo
         sudo -u "#1000" git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
-        
+  
         # Download env file(s)
         aws s3 cp s3://drupal-govcon-2021/phase1.env /var/app/phase1/.env
         aws s3 cp s3://drupal-govcon-2021/phase2.env /var/app/phase2/.env
