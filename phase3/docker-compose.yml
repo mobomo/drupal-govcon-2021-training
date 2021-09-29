@@ -12,8 +12,6 @@ services:
             - ../drupal/storage:${DRUPAL_ROOT}/web/sites/default/files
             - ../drupal/config:${DRUPAL_ROOT}/config
             - ../drupal/modules/custom:${DRUPAL_ROOT}/web/modules/custom
-        links:
-            - db:db
         ports:
             - '80:80'
         env_file:
@@ -21,26 +19,13 @@ services:
         networks:
             - govcon-local
 
-    db:
-        container_name: '${PROJECT_NAME}_db'
-        image: mariadb:10.6
+    memcache:
+        container_name: '${PROJECT_NAME}_memcache'
+        image: memcached:1.6.10-buster
         ports:
-            - '3306:3306'
-        environment:
-            MYSQL_DATABASE: ${MYSQL_DATABASE}
-            MYSQL_USER: ${MYSQL_USER}
-            MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-            MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-        volumes:
-            - sql:/var/lib/mysql
-        command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+          - '11211:11211'
         networks:
             - govcon-local
-        env_file:
-            - .env
-
-volumes:
-    sql:
 
 networks:
     govcon-local:
