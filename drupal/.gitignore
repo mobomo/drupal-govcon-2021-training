@@ -1,4 +1,4 @@
 vendor
 web
-storage
-!storage/.htaccess
+public-files
+private-files
