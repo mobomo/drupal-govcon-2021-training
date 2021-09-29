@@ -4,7 +4,11 @@ Parameters:
   WebServerPublicIP:
     Description: Public IP address of Drupal Web Server
     Type: String
-
+    
+  WebServerPrivateIP:
+    Description: Private IP address of Drupal Web Server
+    Type: String
+    
   DefaultSecurityGroupId:
     Description: ID of default security group in your VPC
     Type: String
