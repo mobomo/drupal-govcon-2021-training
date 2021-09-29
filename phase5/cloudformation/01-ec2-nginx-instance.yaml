@@ -121,9 +121,10 @@ Resources:
         # download .env file
         aws s3 cp s3://drupal-govcon-2021/phase5.env /var/app/phase5/.env
 
-        docker run -d -p 80:80 -v $(pwd)/nginx.conf:/etc/nginx/templates/default.conf.template --env-file $(pwd)/.env nginx:1.19.6-alpine
+        # start container
+        docker-compose -f phase1/docker-compose.yml up --build -d
 
-  DNS:
+  PublicWWWDNS:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : Z01629752800X7928YLRP
@@ -133,13 +134,23 @@ Resources:
       TTL: 60
       Type: A
 
-  CMSDNS:
+  PublicCMSDNS:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneId : Z01629752800X7928YLRP
       Name: cms.govcon2021.mobomo.net
       ResourceRecords:
       - !Ref WebServerPublicIP
+      TTL: 60
+      Type: A
+
+  PrivateCMSDNS:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : Z0038490QWCFHKK094DG
+      Name: drupal.app.local
+      ResourceRecords:
+      - !Ref WebServerPrivateIP
       TTL: 60
       Type: A
 
