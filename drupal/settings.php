@@ -381,7 +381,7 @@ $settings['update_free_access'] = FALSE;
  * This setting is required if $settings['reverse_proxy'] is TRUE.
  */
 # $settings['reverse_proxy_addresses'] = ['a.b.c.d', ...];
-$settings['reverse_proxy_addresses'] = [54.158.62.155];
+$settings['reverse_proxy_addresses'] = ['54.158.62.155'];
 
 /**
  * Reverse proxy trusted headers.
