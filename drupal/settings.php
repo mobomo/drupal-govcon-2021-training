@@ -828,7 +828,7 @@ $databases['default']['default'] = array (
 
 # S3FS settings
 if($_SERVER['S3FS_ENABLED']){
-  $settings['file_private_path'] = 'sites/default/files/private';
+  $settings['file_private_path'] = $_SERVER['DRUPAL_ROOT'] . '/private-files';
   $settings['s3fs.use_s3_for_public'] = TRUE;
   $settings['s3fs.use_s3_for_private'] = TRUE;
   $config['s3fs.settings']['bucket'] = $_SERVER['S3_BUCKET_NAME'];
