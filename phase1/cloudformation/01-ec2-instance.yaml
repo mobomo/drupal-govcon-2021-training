@@ -113,6 +113,8 @@ Resources:
   
         # clone repo
         sudo -u "#1000" git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
+        mkdir /var/app/drupal/public-files /var/app/drupal/private-files /var/app/drupal/custom-modules -p
+        chown 1000:1000 /var/app/drupal/public-files /var/app/drupal/private-files /var/app/drupal/custom-modules
   
         # Download env file(s)
         aws s3 cp s3://drupal-govcon-2021/phase1.env /var/app/phase1/.env
