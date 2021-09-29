@@ -7,6 +7,7 @@ ENV DRUPAL_ROOT=$DRUPAL_ROOT
 RUN apk update && apk upgrade && apk add \
 	apache2-proxy \
 	apache2-ssl \
+	git \
 	php7-fpm \
 	php7 \
 	php7-opcache \
