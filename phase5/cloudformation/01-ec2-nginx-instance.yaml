@@ -98,7 +98,7 @@ Resources:
       Tags: 
         -
           Key: Name
-          Value: Phase 5 Nginx
+          Value: Reverse Proxy
       UserData:
         !Base64 |
         #!/bin/sh -xe

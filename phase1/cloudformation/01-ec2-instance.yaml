@@ -94,7 +94,7 @@ Resources:
       Tags: 
         -
           Key: Name
-          Value: Phase One
+          Value: Drupal App
       UserData:
         !Base64 |
         #!/bin/sh -xe

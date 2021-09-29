@@ -374,14 +374,12 @@ $settings['update_free_access'] = FALSE;
  * address spoofing unless more advanced precautions are taken.
  */
 # $settings['reverse_proxy'] = TRUE;
- $settings['reverse_proxy'] = TRUE;
 
 /**
  * Specify every reverse proxy IP address in your environment.
  * This setting is required if $settings['reverse_proxy'] is TRUE.
  */
 # $settings['reverse_proxy_addresses'] = ['a.b.c.d', ...];
-$settings['reverse_proxy_addresses'] = ['54.158.62.155'];
 
 /**
  * Reverse proxy trusted headers.
@@ -418,8 +416,6 @@ $settings['reverse_proxy_addresses'] = ['54.158.62.155'];
  * @see \Symfony\Component\HttpFoundation\Request::setTrustedProxies
  */
 # $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_HOST | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO | \Symfony\Component\HttpFoundation\Request::HEADER_FORWARDED;
-$settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_HOST | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO;
-
 
 /**
  * Page caching:
@@ -813,7 +809,6 @@ $settings['trusted_host_patterns'] = [
   '^govcon2021\.mobomo\.net$',
   '^cms\.govcon2021\.mobomo\.net$',
   '^www\.govcon2021\.mobomo\.net$',
-  '^localhost$'
 ];
 
 # Config directory
@@ -832,17 +827,23 @@ $databases['default']['default'] = array (
 );
 
 # S3FS settings
-$settings['file_private_path'] = 'sites/default/files/private';
-$settings['s3fs.use_s3_for_public'] = TRUE;
-$settings['s3fs.use_s3_for_private'] = TRUE;
-$config['s3fs.settings']['bucket'] = $_SERVER['S3_BUCKET_NAME'];
-$config['s3fs.settings']['region'] = 'us-east-1';
-$config['s3fs.settings']['use_https'] = FALSE;
-$config['s3fs.settings']['public_folder'] = 's3fs-public';
-$config['s3fs.settings']['private_folder'] = 's3fs-private';
+if($_SERVER['S3FS_ENABLED']){
+  $settings['file_private_path'] = 'sites/default/files/private';
+  $settings['s3fs.use_s3_for_public'] = TRUE;
+  $settings['s3fs.use_s3_for_private'] = TRUE;
+  $config['s3fs.settings']['bucket'] = $_SERVER['S3_BUCKET_NAME'];
+  $config['s3fs.settings']['region'] = 'us-east-1';
+  $config['s3fs.settings']['use_https'] = FALSE;
+  $config['s3fs.settings']['public_folder'] = 's3fs-public';
+  $config['s3fs.settings']['private_folder'] = 's3fs-private';
+}
 
-#TBD
-# $settings['php_storage']['twig']['directory'] = '../storage/php/default'; - Ask about this
+# Reverse proxy settings
+if($_SERVER['REVERSE_PROXY_ENABLED']){
+  $settings['reverse_proxy'] = TRUE;
+  $settings['reverse_proxy_addresses'] = [$_SERVER['REVERSE_PROXY_ADDRESS']];
+  $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO;
+}
 
 # Memcache settings
 $settings['memcache']['servers'] = [$_SERVER['MEMCACHE_HOST'] . ":11211" => 'default'];
