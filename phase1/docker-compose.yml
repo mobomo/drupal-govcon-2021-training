@@ -9,9 +9,10 @@ services:
           args:
             - DRUPAL_ROOT=${DRUPAL_ROOT}
         volumes:
-            - ../drupal/storage:${DRUPAL_ROOT}/web/sites/default/files
+            - ../drupal/public-files:${DRUPAL_ROOT}/web/sites/default/files
+            - ../drupal/private-files:${DRUPAL_ROOT}/private-files
             - ../drupal/config:${DRUPAL_ROOT}/config
-            - ../drupal/modules/custom:${DRUPAL_ROOT}/web/modules/custom
+            - ../drupal/custom-modules:${DRUPAL_ROOT}/web/modules/custom
         links:
             - db:db
         ports:
