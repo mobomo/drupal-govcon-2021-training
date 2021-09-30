@@ -13,6 +13,7 @@ services:
             - ../drupal/private-files:${DRUPAL_ROOT}/private-files
             - ../drupal/config:${DRUPAL_ROOT}/config
             - ../drupal/custom-modules:${DRUPAL_ROOT}/web/modules/custom
+            - ../drupal/custom-themes:${DRUPAL_ROOT}/web/themes/custom
         links:
             - db:db
         ports:
