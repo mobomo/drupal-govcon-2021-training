@@ -207,3 +207,19 @@ Resources:
       TTL: 60
       Type: CNAME
 
+  PublicCMSDNS:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : Z01629752800X7928YLRP
+      Name: cms-scaled.govcon2021.mobomo.net
+      ResourceRecords:
+      - !GetAtt LoadBalancer.DNSName
+      TTL: 60
+      Type: CNAME
+
+Outputs:
+  ALBDNSValue:
+    Description: "ALB DNS Name"
+    Value: !GetAtt [LoadBalancer, DNSName]
+
+

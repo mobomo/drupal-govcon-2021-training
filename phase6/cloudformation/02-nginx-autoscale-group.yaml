@@ -111,7 +111,7 @@ Resources:
       Name: tg-nginx
       HealthCheckIntervalSeconds: 30
       HealthCheckTimeoutSeconds: 25
-      HealthCheckPath: "/nc"
+      HealthCheckPath: "/nc.html"
       HealthCheckPort: 80
       HealthCheckProtocol: HTTP
       HealthyThresholdCount: 2
@@ -203,3 +203,17 @@ Resources:
       TTL: 60
       Type: CNAME
 
+  PublicCMSDNS:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId : Z01629752800X7928YLRP
+      Name: www-scaled.govcon2021.mobomo.net
+      ResourceRecords:
+      - !GetAtt LoadBalancer.DNSName
+      TTL: 60
+      Type: CNAME
+
+Outputs:
+  ALBDNSValue:
+    Description: "ALB DNS Name"
+    Value: !GetAtt [LoadBalancer, DNSName]
