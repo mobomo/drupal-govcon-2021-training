@@ -3,11 +3,7 @@ version: '3'
 services:
     web:
         container_name: '${PROJECT_NAME}_web'
-        build:
-          context: ../
-          dockerfile: ./phase1/docker/dockerfile
-          args:
-            - DRUPAL_ROOT=${DRUPAL_ROOT}
+        image: mobomo/govcon2021_web:latest
         volumes:
             - ../drupal/public-files:${DRUPAL_ROOT}/web/sites/default/files
             - ../drupal/private-files:${DRUPAL_ROOT}/private-files
