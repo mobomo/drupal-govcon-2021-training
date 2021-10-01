@@ -7,7 +7,10 @@ cd ${DRUPAL_ROOT}
 # wait for database to bootstrap itself before we attempt to run the install command
 while ! nc -w 2 -z $MYSQL_HOST 3306; do sleep 1; done
 
-drush --root=${DRUPAL_ROOT}/web site-install minimal -vv --account-name=admin --account-pass=admin --yes --existing-config
+drush --root=${DRUPAL_ROOT}/web site-install \
+    --account-name=admin --account-pass=admin --account-mail=drupal@mobomo.com \
+    --site-mail=drupal@mobomo.com --site-name="Drupal GovCon 2021" \
+    --yes --existing-config
 
 echo "Config found. Processing setting uuid..."
 
