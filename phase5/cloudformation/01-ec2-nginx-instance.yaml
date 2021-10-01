@@ -1,8 +1,8 @@
 AWSTemplateFormatVersion: "2010-09-09"
 
 Parameters:
-  WebServerPublicIP:
-    Description: Public IP address of Drupal Web Server
+  WebServerPublicDnsName:
+    Description: Public DNSname address of Drupal Web Server
     Type: String
     
   WebServerPrivateIP:
@@ -140,9 +140,9 @@ Resources:
       HostedZoneId : Z01629752800X7928YLRP
       Name: www.govcon2021.mobomo.net
       ResourceRecords:
-      - !GetAtt EC2Instance.PublicIp
+      - !GetAtt EC2Instance.PublicDnsName
       TTL: 60
-      Type: A
+      Type: CNAME
 
   PublicCMSDNS:
     Type: AWS::Route53::RecordSet
@@ -150,9 +150,9 @@ Resources:
       HostedZoneId : Z01629752800X7928YLRP
       Name: cms.govcon2021.mobomo.net
       ResourceRecords:
-      - !Ref WebServerPublicIP
+      - !Ref WebServerPublicDnsName
       TTL: 60
-      Type: A
+      Type: CNAME
 
   PrivateCMSDNS:
     Type: AWS::Route53::RecordSet
