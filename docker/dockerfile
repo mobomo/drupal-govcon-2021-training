@@ -1,6 +1,6 @@
 FROM alpine:3.12.3 AS drupal
 
-ARG DRUPAL_ROOT
+ARG DRUPAL_ROOT=/var/www/drupal
 ENV DRUPAL_ROOT=$DRUPAL_ROOT
 
 # Add packages
@@ -38,12 +38,12 @@ RUN apk update && apk upgrade && apk add \
 	&& sed -rie 's|;error_log = log/php7/error.log|error_log = /dev/stdout|g' /etc/php7/php-fpm.conf 
 
 # Copy Apache and PHP configs
-COPY phase1/docker/apache.conf /etc/apache2/httpd.conf
-COPY phase1/docker/php-pool.conf /etc/php7/php-fpm.d/www.conf
-COPY phase1/docker/php.ini /etc/php7/php.ini
+COPY docker/apache.conf /etc/apache2/httpd.conf
+COPY docker/php-pool.conf /etc/php7/php-fpm.d/www.conf
+COPY docker/php.ini /etc/php7/php.ini
 
 # Copy bootstrap scripts
-ADD phase1/docker/scripts /bootstrap/
+ADD docker/scripts /bootstrap/
 
 # expose on port 80 and set workdir
 EXPOSE 80
