@@ -146,38 +146,34 @@ Resources:
         - !Ref DefaultSecurityGroupId
       UserData: 
         !Base64 |
-          #!/bin/sh -xe
-          yum update -y && yum install -y docker git mysql
+        #!/bin/sh -xe
+        yum update -y && yum install -y docker git mysql
 
-          # Install docker-compose and setup docker
-          service docker start
-          curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          chmod +x /usr/local/bin/docker-compose
-          usermod -aG docker ec2-user
-          ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-    
-          # Setup app folder structure
-          mkdir /var/app -p
-          chown 1000:1000 /var/app
-    
-          # clone repo
-          sudo -u "#1000" git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
-          mkdir /var/app/drupal/public-files /var/app/drupal/private-files /var/app/drupal/custom-modules -p
-          chown 1000:1000 /var/app/drupal/public-files /var/app/drupal/private-files /var/app/drupal/custom-modules
-    
-          # Download env file(s)
-          aws s3 cp s3://drupal-govcon-2021/phase1.env /var/app/phase1/.env
-          aws s3 cp s3://drupal-govcon-2021/phase2.env /var/app/phase2/.env
-          aws s3 cp s3://drupal-govcon-2021/phase3.env /var/app/phase3/.env
-          aws s3 cp s3://drupal-govcon-2021/phase4.env /var/app/phase4/.env
-          aws s3 cp s3://drupal-govcon-2021/phase5.env /var/app/phase5/.env
+        # Install docker-compose and setup docker
+        service docker start
+        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+        usermod -aG docker ec2-user
+        ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  
+        # Setup app folder structure
+        mkdir /var/app -p
+        chown 1000:1000 /var/app
+  
+        # clone repo
+        sudo -u "#1000" git clone https://github.com/mobomo/drupal-govcon-2021-training.git /var/app
+        mkdir /var/app/drupal/public-files /var/app/drupal/private-files /var/app/drupal/custom-modules -p
+        chown 1000:1000 /var/app/drupal/public-files /var/app/drupal/private-files /var/app/drupal/custom-modules
+  
+        # Download env file(s)
+        aws s3 cp s3://drupal-govcon-2021/phase1.env /var/app/phase1/.env
+        aws s3 cp s3://drupal-govcon-2021/phase2.env /var/app/phase2/.env
+        aws s3 cp s3://drupal-govcon-2021/phase3.env /var/app/phase3/.env
+        aws s3 cp s3://drupal-govcon-2021/phase4.env /var/app/phase4/.env
 
-          # Export environment variables
-          set -a && source /var/app/phase4/.env && set +a
-
-          # startup docker-compose
-          cd /var/app
-          docker-compose -f phase4/docker-compose.yml up --build -d
+        # startup docker-compose
+        cd /var/app
+        docker-compose -f phase4/docker-compose.yml up -d
 
   AutoscaleGroup:
     Type: "AWS::AutoScaling::AutoScalingGroup"

@@ -8,5 +8,5 @@ WEBSERVER_IP=$(aws cloudformation describe-stacks --stack-name phase1-webserver 
 ssh -o "StrictHostKeyChecking=no" $WEBSERVER_IP << EOF
   cd /var/app 
   docker-compose -f phase3/docker-compose.yml down
-  docker-compose -f phase4/docker-compose.yml up -d --build
+  docker-compose -f phase4/docker-compose.yml up -d
 EOF

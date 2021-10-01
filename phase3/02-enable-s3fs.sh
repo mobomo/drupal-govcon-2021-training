@@ -8,6 +8,6 @@ WEBSERVER_IP=$(aws cloudformation describe-stacks --stack-name phase1-webserver 
 ssh $WEBSERVER_IP << EOF
   cd /var/app 
   docker-compose -f phase2/docker-compose.yml down
-  docker-compose -f phase3/docker-compose.yml up -d --build
+  docker-compose -f phase3/docker-compose.yml up -d
   docker exec -u http govcon2021_web sh -c "drush pm-enable s3fs && drush cache-rebuild && drush s3fs-copy-local"
 EOF
