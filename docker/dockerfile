@@ -1,0 +1,74 @@
+FROM alpine:3.12.3 AS drupal
+
+ARG DRUPAL_ROOT=/var/www/drupal
+ENV DRUPAL_ROOT=$DRUPAL_ROOT
+
+# Add packages
+RUN apk update && apk upgrade && apk add \
+	apache2-proxy \
+	apache2-ssl \
+	git \
+	php7-fpm \
+	php7 \
+	php7-opcache \
+	php7-gd \
+	php7-json \
+	php7-phar \
+	php7-iconv \
+	php7-mbstring \
+	php7-zlib \
+	php7-curl \
+	php7-session \
+	php7-redis \
+	php7-pdo_mysql \
+	php7-tokenizer \
+	php7-dom \
+	php7-simplexml \
+	php7-xml \
+	php7-ctype \
+	mysql-client \
+	'memcached=~1.6' \
+	'php7-pecl-memcache=~4.0' \
+	curl \ 
+	&& cp /usr/bin/php7 /usr/bin/php \
+    && rm -f /var/cache/apk/* \
+	&& rm -rf /etc/init.d/* \
+    && addgroup -g 1000 -S http \
+    && adduser -G http -u 1000 -s /bin/sh -D http \
+	&& sed -rie 's|;error_log = log/php7/error.log|error_log = /dev/stdout|g' /etc/php7/php-fpm.conf 
+
+# Copy Apache and PHP configs
+COPY docker/apache.conf /etc/apache2/httpd.conf
+COPY docker/php-pool.conf /etc/php7/php-fpm.d/www.conf
+COPY docker/php.ini /etc/php7/php.ini
+
+# Copy bootstrap scripts
+ADD docker/scripts /bootstrap/
+
+# expose on port 80 and set workdir
+EXPOSE 80
+WORKDIR ${DRUPAL_ROOT}
+RUN chown 1000:1000 ${DRUPAL_ROOT}
+
+# Install Composer
+RUN	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+
+# Change to httpd user
+USER http
+
+# Copy Drupal
+COPY --chown=http:http drupal ${DRUPAL_ROOT}
+
+# Run Composer Install, and move settings.php
+RUN cd ${DRUPAL_ROOT} \
+    && composer install \
+    && mv settings.php web/sites/default/
+
+# Change to root user
+USER root
+
+# Create symlink for drush
+RUN ln -s ${DRUPAL_ROOT}/vendor/bin/drush /usr/local/bin/drush
+
+# send it
+CMD ["/bootstrap/entrypoint.sh"]
