@@ -1,7 +1,7 @@
 uuid: fa4ed1bf-9f13-44a6-b595-fc57defdaf93
-name: 'Drush Site-Install'
-mail: admin@example.com
-slogan: ''
+name: 'Drupal GovCon 2021'
+mail: drupal@mobomo.com
+slogan: 'Drupal from Development to Production to Scale'
 page:
   403: ''
   404: ''

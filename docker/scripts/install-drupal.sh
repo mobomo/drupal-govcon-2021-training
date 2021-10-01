@@ -8,7 +8,7 @@ cd ${DRUPAL_ROOT}
 while ! nc -w 2 -z $MYSQL_HOST 3306; do sleep 1; done
 
 drush --root=${DRUPAL_ROOT}/web site-install \
-    --account-name=admin --account-pass=admin --account-mail=drupal@mobomo.com \
+    --account-name=govcon2021 --account-pass=mobomo --account-mail=drupal@mobomo.com \
     --site-mail=drupal@mobomo.com --site-name="Drupal GovCon 2021" \
     --yes --existing-config
 
