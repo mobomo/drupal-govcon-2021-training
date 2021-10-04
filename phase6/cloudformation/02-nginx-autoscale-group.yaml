@@ -185,7 +185,7 @@ Resources:
       TargetGroupARNs: [ !Ref LoadBalancerTargetGroup ]
       Tags:
         - Key: Name
-          Value: "Phase 6 Nginx App"
+          Value: "Phase 6 Nginx RProxy"
           PropagateAtLaunch: true
 
   PrivateCMSDNS:
