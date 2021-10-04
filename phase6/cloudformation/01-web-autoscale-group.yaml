@@ -166,14 +166,11 @@ Resources:
         chown 1000:1000 /var/app/drupal/public-files /var/app/drupal/private-files /var/app/drupal/custom-modules
   
         # Download env file(s)
-        aws s3 cp s3://drupal-govcon-2021/phase1.env /var/app/phase1/.env
-        aws s3 cp s3://drupal-govcon-2021/phase2.env /var/app/phase2/.env
-        aws s3 cp s3://drupal-govcon-2021/phase3.env /var/app/phase3/.env
-        aws s3 cp s3://drupal-govcon-2021/phase4.env /var/app/phase4/.env
+        aws s3 cp s3://drupal-govcon-2021/phase6.env /var/app/phase6/.env
 
         # startup docker-compose
         cd /var/app
-        docker-compose -f phase4/docker-compose.yml up -d
+        docker-compose -f phase6/docker-compose-web.yml up -d
 
   AutoscaleGroup:
     Type: "AWS::AutoScaling::AutoScalingGroup"

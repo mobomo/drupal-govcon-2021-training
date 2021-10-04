@@ -168,7 +168,7 @@ Resources:
 
         # startup docker-compose
         cd /var/app
-        docker-compose -f phase6/docker-compose.yml up -d
+        docker-compose -f phase6/docker-compose-rproxy.yml up -d
 
   AutoscaleGroup:
     Type: "AWS::AutoScaling::AutoScalingGroup"

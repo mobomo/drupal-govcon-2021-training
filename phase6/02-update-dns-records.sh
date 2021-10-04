@@ -12,7 +12,7 @@ aws route53 change-resource-record-sets --hosted-zone-id Z01629752800X7928YLRP -
 {
   "Changes": [
     {
-      "Action": "DELETE",
+      "Action": "UPSERT",
       "ResourceRecordSet": {
         "Name": "cms.govcon2021.mobomo.net",
         "Type": "CNAME",
@@ -34,7 +34,7 @@ aws route53 change-resource-record-sets --hosted-zone-id Z01629752800X7928YLRP -
 {
   "Changes": [
     {
-      "Action": "DELETE",
+      "Action": "UPSERT",
       "ResourceRecordSet": {
         "Name": "www.govcon2021.mobomo.net",
         "Type": "CNAME",
