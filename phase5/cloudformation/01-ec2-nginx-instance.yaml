@@ -132,7 +132,7 @@ Resources:
         cd /var/app/phase5
 
         # start container
-        docker-compose up -d
+        docker-compose -f docker-compose-rproxy.yml up -d
 
   PublicWWWDNS:
     Type: AWS::Route53::RecordSet

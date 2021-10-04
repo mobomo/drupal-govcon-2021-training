@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+    web:
+        container_name: '${PROJECT_NAME}_web'
+        image: mobomo/govcon2021_web:latest
+        volumes:
+            - ../drupal/public-files:${DRUPAL_ROOT}/web/sites/default/files
+            - ../drupal/private-files:${DRUPAL_ROOT}/private-files
+            - ../drupal/config:${DRUPAL_ROOT}/config
+            - ../drupal/custom-modules:${DRUPAL_ROOT}/web/modules/custom
+            - ../drupal/custom-themes:${DRUPAL_ROOT}/web/themes/custom
+        ports:
+            - '80:80'
+        env_file:
+            - .env
+        environment:
+            REVERSE_PROXY_ADDRESSES: ${REVERSE_PROXY_ADDRESSES}
+        networks:
+            - govcon-local
+
+networks:
+    govcon-local:
+        driver: bridge
