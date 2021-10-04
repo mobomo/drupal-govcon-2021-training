@@ -843,7 +843,7 @@ if($_SERVER['S3FS_ENABLED']){
 # Reverse proxy settings
 if($_SERVER['REVERSE_PROXY_ENABLED']){
   $settings['reverse_proxy'] = TRUE;
-  $settings['reverse_proxy_addresses'] = [$_SERVER['REVERSE_PROXY_ADDRESS']];
+  $settings['reverse_proxy_addresses'] = explode(',',$_SERVER['REVERSE_PROXY_ADDRESSES']);
   $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO;
 }
 
