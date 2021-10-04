@@ -121,6 +121,7 @@ Resources:
         aws s3 cp s3://drupal-govcon-2021/phase2.env /var/app/phase2/.env
         aws s3 cp s3://drupal-govcon-2021/phase3.env /var/app/phase3/.env
         aws s3 cp s3://drupal-govcon-2021/phase4.env /var/app/phase4/.env
+        aws s3 cp s3://drupal-govcon-2021/phase5.env /var/app/phase5/.env
 
         # startup docker-compose
         cd /var/app
