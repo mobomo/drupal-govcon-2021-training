@@ -1,5 +1,5 @@
 # drupal-govcon-2021-training
-Training repository for Drupal GovCon 2021
+Repository for Drupal GovCon 2021 training session
 
 ## TODO - Future Improvements
 * More README documentation
